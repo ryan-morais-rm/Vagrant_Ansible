@@ -1,0 +1,20 @@
+# Esse playbook será executado dentro do processo "vagrant up"
+# e vai chamar todos os outros playbooks
+
+---
+- name: Execução dos playbooks por um playbook principal
+  hosts: all
+  become: true
+  become_user: root
+  tasks:
+    - name: Inclusão do Playbook de conf do sistema
+      include_tasks: ~/Vagrant_Ansible/playbooks/conf_sistema.yaml
+
+    - name: Inclusão do Playbook de conf dos usuários
+      include_tasks: ~/Vagrant_Ansible/playbooks/conf_usuarios.yaml
+
+    - name: Inclusão do Playbook de conf do volumes
+      include_tasks: ~/Vagrant_Ansible/playbooks/conf_lvm.yaml
+
+    - name: Inclusão do Playbook de conf do NFS
+      include_tasks: ~/Vagrant_Ansible/playbooks/conf_nfs.yaml
