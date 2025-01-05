@@ -1,0 +1,87 @@
+# Toda a configuração de SSH está mantida de .yaml
+
+# CRIAÇÃO DA MENSAGEM DE SAUDAÇÃO DO SSH
+- name: Adicionando uma messagem de SSH para todos os usuários
+  lineinfile:
+    path: /etc/profile
+    line: |
+      echo "Acesso restrito apenas à pessoas com autorização expressa"
+      echo "Seu acesso está sendo monitorado !!!"
+    insertafter: EOF
+#---------------------------------------------------------------------------------------
+
+
+# GARANTINDO QUE O DIRETÓRIO .SSH EXISTE PARA OS USUÁRIOS
+- name: Configuração do diretório .ssh no usuário ryan
+  file:
+    path: /home/ryan/.ssh
+    state: directory
+    owner: ryan
+    group: acesso_ssh
+    mode: '0700'
+- name: Configuração do diretório .ssh no usuário julio
+  file:
+    path: /home/julio/.ssh
+    state: directory
+    owner: julio
+    group: acesso_ssh
+    mode: '0700'
+#---------------------------------------------------------------------------------------
+
+
+# CONFIGURAÇÃO DE ACESSO, POR MEIO DE CHAVES
+- name: Configuração de auth, por meio de chave pública do usuário ryan
+  ansible.builtin.copy:
+    src: ~/Vagrant_Ansible/chaves/ryan/ryan_id_rsa.pub
+    dest: /home/ryan/.ssh/authorized_keys
+    owner: "ryan"
+    group: "acesso_ssh"
+    mode: '0600'
+- name: Configuração de auth, por meio de chave pública do usuário julio
+  ansible.builtin.copy:
+    src: ~/Vagrant_Ansible/chaves/julio/julio_id_rsa.pub
+    dest: /home/julio/.ssh/authorized_keys
+    owner: "julio"
+    group: "acesso_ssh"
+    mode: '0600'
+#---------------------------------------------------------------------------------------
+
+
+# DESATIVANDO A AUTENTICAÇÃO POR SENHA
+- name: Desativar autenticação por senha
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#?PasswordAuthentication'
+    line: 'PasswordAuthentication no'
+    state: present
+#---------------------------------------------------------------------------------------     
+
+
+# DESATIVANDO O TECLADO INTERATIVO
+- name: Desativação do teclado interativo
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#?ChallengeResponseAuthentication'
+    line: 'ChallengeResponseAuthentication no'
+    state: present
+#---------------------------------------------------------------------------------------
+
+
+# BLOQUEANDO ACESSO AO ROOT VIA SSH
+- name: Bloqueio de acessar o root via SSH
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#?PermitRootLogin'
+    line: 'PermitRootLogin no'
+    state: present
+#---------------------------------------------------------------------------------------
+
+      
+# PERMITINDO ACESSO APENAS PARA USUÁRIOS DO GRUPO ACESSO_SSH
+- name: Restrição para os usuários do grupo acesso_ssh
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#?AllowGroups'
+    line: 'AllowGroups acesso_ssh'
+    state: present
+#---------------------------------------------------------------------------------------

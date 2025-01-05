@@ -1,6 +1,0 @@
-1. Nós temos que tornar o arquivo "monitoramento.sh" executável já dentro dos playbook "conf_sistema.yaml"
-2. O usuário que o Ansible utilizar para rodar os comandos não pode ter senha, para automatizar. 
-3. Tem que criar o arquivo "inventory.yaml" para o Ansible acessar as máquinas
-4. O arquivo de monitoramento já está feito, porém ele foi realocado para o arquivo de configuração do NFS
-5. Tudo está configurado até o tópico 2.5.5 
-6. O arquivo reload.sh foi usado para destruir e construir a máquina

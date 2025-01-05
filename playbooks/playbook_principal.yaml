@@ -13,6 +13,9 @@
     - name: Inclusão do Playbook de conf dos usuários
       include_tasks: ~/Vagrant_Ansible/playbooks/conf_usuarios.yaml
 
+    - name: Inclusão do Playbook de conf do SSH
+      include_tasks: ~/Vagrant_Ansible/playbooks/conf_ssh.yaml
+
     - name: Inclusão do Playbook de conf do volumes
       include_tasks: ~/Vagrant_Ansible/playbooks/conf_lvm.yaml
 

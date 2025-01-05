@@ -1,1 +1,56 @@
-# Toda configuração desse playbook corresponde ao volume lógico
+# Toda configuração desse playbook corresponde ao volume lógico LVM
+
+---
+# INSTALANDO AS DEPENDÊNCIAS DO LVM
+- name: Instalando a dependência lvm2
+  package:
+    name: lvm2
+    state: present
+#-----------------------------------------------------------------------------
+
+# ESTÁ FALTANDO CONFIGURAR O VOLUME FÍSICO DO LVM
+
+# CRIANDO O VOLUME GROUP COM OS VOLUMES FÍSICOS
+- name: Criando o Volume Group
+  lvg:
+    vg: dados
+    pvs: /dev/sdb,/dev/sdc,/dev/sdd
+    state: present
+#-----------------------------------------------------------------------------
+
+
+# CRIANDO O VOLUME LÓGICO COM 15GB DE TAMANHO
+- name: Criação do LVM com 15GB de tamanho
+  lvol:
+    vg: dados
+    lv: sistema
+    size: 15G
+    state: present
+#-----------------------------------------------------------------------------
+
+
+# CRIANDO O DIRETÓRIO /DADOS
+- name: Apontando para o diretório em /dados/
+  ansible.builtin.file:
+    path: /dados/
+    state: directory
+    mode: '0755'
+#-----------------------------------------------------------------------------
+
+
+# FORMATANDO O VOLUME COM O SISTEMA DE ARQUIVOS EXT4
+- name: Formatando o volume com o ext4
+  filesystem:
+    fstype: ext4
+    dev: /dev/dados/sistema
+#-----------------------------------------------------------------------------
+
+
+# MONTANDO O VOLUME LÓGICO NO /DADOS/
+- name: Montando o LVM em /dados
+  mount:
+    path: /dados/
+    src: /dev/dados/sistema
+    fstype: ext4
+    state: mounted
+#-----------------------------------------------------------------------------
