@@ -2,7 +2,7 @@
 Projeto de Administração de Sistemas Abertos
 Professor = Pedro Filho
 Instituição = IFPB \ Campus João Pessoa
-Alunos = Júlio Caio e Ryan de Morais
+Alunos = Júlio Caio Rodrigues do Santos e Ryan de Morais Correia
 
 # CHAVES
 Todas as chaves SSH possuem passphrases
