@@ -23,8 +23,8 @@ Para configuração do vagrant, realize os seguintes pontos:
 # PLAYBOOKS
 Foi realizada a adoção de um playbook mestre, chamado "playbook-principal.yaml"
 Ele faz a chamada dos 5 playbooks, a baixo, dentro do VagrantFile
-A configuração do Ansible está distribuída em 4 playbooks,
-são eles: "conf-lvm.yaml", "conf-nfs.yaml", "conf-sistema.yaml", "conf-usuarios.yaml" e "conf-ssh.yaml"
+A configuração do Ansible está distribuída em: 
+"conf-lvm.yaml", "conf-nfs.yaml", "conf-sistema.yaml", "conf-usuarios.yaml" e "conf-ssh.yaml"
 1. O arquivo "conf-lvm.yaml" possui toda a configuração dos volumes lógicos. 
 2. O arquivo "conf-nfs.yaml" possui toda a configuração do sistema de arquivos.
 3. O arquivo "conf-sistema.yaml" possui a configuração de atualização do sistema
