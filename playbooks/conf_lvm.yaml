@@ -8,7 +8,6 @@
     state: present
 #-----------------------------------------------------------------------------
 
-# ESTÁ FALTANDO CONFIGURAR O VOLUME FÍSICO DO LVM
 
 # CRIANDO O VOLUME GROUP COM OS VOLUMES FÍSICOS
 - name: Criando o Volume Group
@@ -54,3 +53,52 @@
     fstype: ext4
     state: mounted
 #-----------------------------------------------------------------------------
+
+
+# ADICIONANDO A CONFIGURAÇÃO PERSISTENTE
+- name: Adicionando a configuração do LVM ao /etc/fstab
+  lineinfile:
+    path: /etc/fstab
+    line: "/dev/dados/sistema /dados ext4 defaults 0 0"
+    state: present
+#-----------------------------------------------------------------------------
+
+
+# VERIFICANDO SE A CONFIGURAÇÃO ESTÁ FUNCIONANDO
+- name: Testando a montagem com /etc/fstab
+  shell: mount -a
+  register: mount_test
+  failed_when: "'error' in mount_test.stderr.lower()"
+#-----------------------------------------------------------------------------
+
+
+# EXIBINDO MENSAGEM DE SUCESSO
+- name: Exibir confirmação que existe persistência
+  debug:
+    msg: "Configuração do LVM adicionada ao /etc/fstab e testada com sucesso"
+#-----------------------------------------------------------------------------
+
+
+# MOSTRANDO AS INFORMAÇÕES DE MONTAGEM
+- name: Veja as informações de PV, VG e LV no /tmp/arquivo_part.txt
+  ansible.builtin.file:
+    path: /tmp/arquivo_part.txt
+    state: touch
+    mode: '0644'
+
+- name: Redirecionando a saída do pvdisplay
+  ansible.builtin.shell: "pvdisplay >> /tmp/arquivo_part.txt"
+  register: pvdisplay_output
+
+- name: Redirecionando a saída do vgdisplay
+  ansible.builtin.shell: "vgdisplay >> /tmp/arquivo_part.txt"
+  register: pvdisplay_output
+   
+- name: Redirecionando a saída do lvdisplay
+  ansible.builtin.shell: "lvdisplay >> /tmp/arquivo_part.txt"
+  register: pvdisplay_output
+
+- name: Exibindo confirmação de salvamento
+  debug:
+    msg: "As informações do LVM foram direcionadas para /tmp/arquivo_part.txt, realizamos isso para uma melhor visualização e praticidade."
+#-----------------------------------------------------------------------------    

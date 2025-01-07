@@ -3,7 +3,7 @@
 
 ---
 - name: Execução dos playbooks por um playbook principal
-  hosts: all
+  hosts: servidores
   become: true
   become_user: root
   tasks:
