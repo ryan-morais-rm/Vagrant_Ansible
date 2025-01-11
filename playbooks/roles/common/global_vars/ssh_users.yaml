@@ -1,0 +1,12 @@
+ssh_users:
+  - name: "ryan.morais"
+    shell: /bin/bash
+    home: "/home/ryan.morais"
+    password: "$6$Y2HS5gc5WvcLkccS$EXOUqZ6qF9/743QqXRVnzytX9nYXHn.3NsnGM/9fqIr1Wnf5M8bNcNoIyJ13PNho/CLvUXc/.NacncLUqgEjc1"
+    key: "../conf_SSH/files/Keys/ryan.morais/ryan_id_rsa.pub"
+
+  - name: "julio.caio"
+    shell: /bin/bash
+    home: "/home/julio.caio"
+    password: "$6$8a83clfyST1D9jPb$CuxsTYjGxbSmXBikFdFzLEcBLgVfRjVTfcOf8KMNlEfTdW6DhGq4lG67dilpoq2EBwedWcoiT512RVDpXi7O4."
+    key: "../conf_SSH/files/Keys/julio.caio/julio_id_rsa.pub"

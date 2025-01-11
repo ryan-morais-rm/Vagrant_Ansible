@@ -1,0 +1,78 @@
+### SSH - Configuration ### 
+
+### Welcome Notification ###
+
+- name: Adicionar mensagem de boas-vindas para todos os usuários
+  lineinfile:
+    path: /etc/profile
+    line: |
+      echo "Acesso restrito apenas a pessoas com autorização expressa."
+      echo "Seu acesso está sendo monitorado!"
+    insertafter: EOF
+
+#### CREATE .SSH DIRECTORY FOR USERS ####
+
+- name: Garantir que os diretórios .ssh existem para usuários do grupo acesso_ssh
+  vars_files:
+    - "global_vars/ssh_users.yml"
+  file:
+    path: "/home/{{ item.name }}/.ssh"
+    state: directory
+    owner: "{{ item.name }}"
+    group: "{{ item.group }}"
+    mode: '0700'
+  loop: "{{ ssh_users }}"
+
+#### CONFIGURE PUBLIC KEY AUTHENTICATION ####
+
+- name: Configurar chaves públicas para usuários do grupo acesso_ssh
+  vars_files:
+    - global_vars/ssh_users.yaml
+  ansible.builtin.copy:
+    src: "~/Vagrant_Ansible/roles/common/conf_SSH/files/Keys/{{ item.name }}/{{ item.key }}"
+    dest: "/home/{{ item.name }}/.ssh/authorized_keys"
+    owner: "{{ item.name }}"
+    group: "acesso_ssh"
+    mode: '0600'
+  loop: "{{ ssh_users }}"
+
+####   SSHD_CONFIG SETTINGS  ###
+- name: Desativar autenticação por senha
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#?PasswordAuthentication'
+    line: 'PasswordAuthentication no'
+
+- name: Desativar autenticação com teclado interativo
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#?ChallengeResponseAuthentication'
+    line: 'ChallengeResponseAuthentication no'
+
+###   Block root access via SSH ### 
+
+- name: Bloquear acesso root via SSH
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#?PermitRootLogin'
+    line: 'PermitRootLogin no'
+
+- name: Restringir acesso SSH ao grupo acesso_ssh
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#?AllowGroups'
+    line: 'AllowGroups acesso_ssh'
+
+### Test SSH Configuration ###
+- name: Testar configuração do SSH antes de reiniciar
+  command: sshd -t
+  register: sshd_test
+  failed_when: sshd_test.rc != 0
+  changed_when: false
+  tags: conf_SSH
+
+### RESTART SSH SERVICE ###
+- name: Reiniciar o serviço SSH para aplicar as alterações
+  service:
+    name: sshd
+    state: restarted

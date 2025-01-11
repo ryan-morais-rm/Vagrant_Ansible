@@ -1,0 +1,66 @@
+### NFS-SERVER - Configuration ###
+#====================================#
+
+---
+### CONFIGURE NFS EXPORT DIRECTORIES ###
+
+- name: Create directories for NFS export
+  vars_files:
+    - "global_vars/nfs_server.yaml"
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: directory
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode: "{{ item.mode }}"
+  loop: "{{ nfs_exports }}"
+
+- name: Configure exports in /etc/exports
+  ansible.builtin.copy:
+    dest: /etc/exports
+    content: |
+      {% for export in nfs_exports %}
+      {{ export.path }} {{ export.clients }}
+      {% endfor %}
+    owner: root
+    group: root
+    mode: '0644'
+
+### ENABLE AND START NFS SERVICE ###
+
+- name: Enable and start NFS service
+  ansible.builtin.service:
+    name: nfs-kernel-server
+    state: started
+    enabled: yes
+
+### EXPORT NFS DIRECTORIES ###
+
+- name: Apply NFS export configurations
+  ansible.builtin.command:
+    cmd: exportfs -arv
+    register: exportfs_output
+  changed_when: "'exported' in exportfs_output.stdout"
+
+- name: Ensure NFS service is running
+  ansible.builtin.service:
+    name: nfs-kernel-server
+    state: started
+
+
+### Exporting Monitoring File ###
+
+- name: Transmitindo o arquivo de monitoramento
+  copy: 
+    src: ./monit.sh
+    dest: /usr/local/bin/monit.sh
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Garantindo que o arquivo sempre será ativado para todos os usuários
+  lineinfile:
+    path: /etc/profile
+    line: "usr/local/bin/monit.sh"
+    create: yes
+    state: present

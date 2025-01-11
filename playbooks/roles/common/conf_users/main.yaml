@@ -1,0 +1,57 @@
+---
+# Description: 
+    # - Create Users, Group, SUDO
+    # - Configure SSH to users
+
+Creating Users, Groups, e Permissions (SUDO)
+#===============================================================
+
+### CREATING USERS ###
+
+- name: Criar usuários do sistema com configurações definidas
+  vars_files:
+    - "global_vars/ssh_users.yml"
+  ansible.builtin.user:
+    name: "{{ item.name }}"
+    shell: "{{ item.shell }}"
+    home: "{{ item.home }}"
+    password: "{{ item.password }}"
+    state: present
+    create_home: yes
+  loop: "{{ ssh_users }}"
+
+### CREATING IFPB GROUP ###
+
+- name: Criar o grupo ifpb
+  ansible.builtin.group:
+    name: ifpb
+    state: present
+
+### CREATING ACESSO_SSH GROUP ###
+
+- name: Criar o grupo acesso_ssh
+  ansible.builtin.group:
+    name: acesso_ssh
+    state: present
+
+### ADDING USERS TO GROUPS ###
+
+- name: Adicionar usuários aos grupos
+  ansible.builtin.user:
+    name: "{{ item.name }}"
+    groups: "{{ item.groups | default([]) }}"
+    append: yes
+  loop: "{{ ssh_users }}"
+  when: item.groups is defined and item.groups | length > 0
+
+### CONFIGURING SUDO FOR IFPB GROUP ###
+
+- name: Configurar permissões SUDO para o grupo ifpb
+  ansible.builtin.copy:
+    dest: /etc/sudoers.d/{{ sudo_group }}
+    content: "{{ sudo_group }} ALL=(ALL) NOPASSWD:ALL"
+    owner: root
+    group: root
+    mode: '0440'
+  vars:
+    sudo_group: ifpb
