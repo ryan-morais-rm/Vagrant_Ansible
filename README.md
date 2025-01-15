@@ -10,20 +10,20 @@
 **Estrutura**:
 ```bash
 .
+├── playbooks
+│   ├── ansible.cfg
+│   ├── inventory.ini
+│   ├── main.yaml
+│   ├── Passwords.txt
+│   └── tasks
+│       ├── conf_LVM
+│       ├── conf_NFS
+│       ├── conf_SSH
+│       ├── conf_Sys
+│       └── conf_users
 ├── README.md
-├── Vagrantfile
-└── playbooks
-    ├── ansible.cfg
-    ├── inventory.ini
-    ├── main.yaml
-    └── roles
-        └── common
-            ├── conf_LVM
-            ├── conf_NFS
-            ├── conf_SSH
-            ├── conf_Sys
-            ├── conf_users
-            └── global_vars
+└── Vagrantfile
+
 ```
 ### 💻 Tecnologias Utilizadas:
 
@@ -36,7 +36,7 @@
 
 <p>Nosso projeto automatiza a configuração de sistemas através de Vagrant e Ansible, permitindo a criação e gerenciamento de máquinas virtuais (VMs) e a configuração de diversos serviços de forma automatizada.
 <br>
-O playbook principal orquestra a execução das roles responsáveis pela configuração do sistema, com a sequência lógica de tarefas a serem aplicadas, garantindo uma automação eficiente e sem erros.
+O playbook principal orquestra a execução das tasks responsáveis pela configuração do sistema, com a sequência lógica destas tarefas a serem aplicadas, garantindo uma automação eficiente e sem erros.
 </p>
 <main class="container">
 
@@ -46,8 +46,8 @@ O playbook é projetado ao ser executado cria uma máquina virtual e faz o provi
 
 **Privilégios de superusuário**: Usando a flag become: true, o playbook garante que todas as tarefas que exigem privilégios elevados (como instalação de pacotes e configuração de serviços) sejam executadas sem restrições.
 
-Execução das Roles: 
-    O playbook invoca as roles de maneira sequencial, conforme necessário para configurar a infraestrutura. As roles executadas são:
+Execução das Tasks: 
+    O playbook invoca as tasks de maneira sequencial, conforme necessário para configurar a infraestrutura. As tasks executadas são:
     1. **conf_Sys**: Atualiza e configura o sistema básico, como pacotes essenciais e configurações de rede.<br>
     2. **conf_users**: Criação e configuração de usuários definidos no arquivo de variáveis, incluindo permissões para acesso via SSH.<br>
     3. **conf_SSH**: Ajustes no serviço SSH para garantir que as configurações de segurança estejam corretas.<br>

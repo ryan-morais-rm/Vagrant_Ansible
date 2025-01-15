@@ -1,7 +1,11 @@
-###     LVM Configuration  ###
-#=================================#
-
+#### LVM - Configuration ###
 ---
+# INSTALANDO AS DEPENDÊNCIAS DO LVM
+- name: Instalando a dependência lvm2
+  package:
+    name: lvm2
+    state: present
+#-----------------------------------------------------------------------------
 
 # CRIANDO O VOLUME GROUP COM OS VOLUMES FÍSICOS
 - name: Criando o Volume Group
@@ -10,7 +14,6 @@
     pvs: /dev/sdb,/dev/sdc,/dev/sdd
     state: present
 #-----------------------------------------------------------------------------
-
 
 # CRIANDO O VOLUME LÓGICO COM 15GB DE TAMANHO
 - name: Criação do LVM com 15GB de tamanho
@@ -95,4 +98,4 @@
 - name: Exibindo confirmação de salvamento
   debug:
     msg: "As informações do LVM foram direcionadas para /tmp/arquivo_part.txt, realizamos isso para uma melhor visualização e praticidade."
-#-----------------------------------------------------------------------------   
+#-----------------------------------------------------------------------------    

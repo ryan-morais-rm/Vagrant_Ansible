@@ -1,18 +1,19 @@
-###      Main Playbook    ###
-#============================#
-
-# (pt-BR) Este playbook executa as roles definidas no escopo do projeto,
-#         garantindo a configuração do ambiente e a aplicação das tasks necessárias.
-
-# (en-US) This playbook executes the roles defined in the project scope,
-#         ensuring environment setup and the execution of required tasks.
-
-- hosts: servers
+- name: Execução dos playbooks por um playbook principal
+  hosts: servidores
   become: true
   become_user: root
-  roles:
-    - common/conf_Sys
-    - common/conf_users
-    - common/conf_SSH
-    - common/conf_LVM
-    - common/conf_NFS
+  tasks:
+    - name: Inclusão do Playbook de conf do sistema
+      include_tasks: ./tasks/conf_Sys/main.yaml
+
+    - name: Inclusão do Playbook de conf dos usuários
+      include_tasks: ./tasks/conf_users/main.yaml
+
+    - name: Inclusão do Playbook de conf do SSH
+      include_tasks: ./tasks/conf_SSH/main.yaml
+
+    - name: Inclusão do Playbook de conf do volumes
+      include_tasks: ./tasks/conf_LVM/main.yaml
+
+    - name: Inclusão do Playbook de conf do NFS
+      include_tasks: ./tasks/conf_NFS/main.yaml

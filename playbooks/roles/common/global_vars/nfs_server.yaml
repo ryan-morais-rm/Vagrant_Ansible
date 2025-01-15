@@ -1,6 +1,0 @@
-nfs_exports:
-  - path: "/nfs/dados"
-    clients: "192.168.57.0/24(rw,sync,no_root_squash,no_subtree_check)"
-    owner: "nfs-ifpb"
-    group: "nfs-ifpb"
-    mode: "0755"
