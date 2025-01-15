@@ -80,6 +80,6 @@ Todas as chaves SSH possuem passphrases
 ## 🌐 Collaborators:
 
 - [![LinkedIn](https://img.shields.io/badge/-Júlio_Caio-blue?style=for-the-badge&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/julio-caio-r-santos/)](https://www.linkedin.com/in/julio-caio-r-santos/)
-- [![LinkedIn](https://img.shields.io/badge/-Ryan_Morais-blue?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/ryan-morais-correia-0abb94277) <br>
+- [![LinkedIn](https://img.shields.io/badge/-Ryan_de_Morais-blue?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/ryan-morais-correia-0abb94277) <br>
 
 <br>

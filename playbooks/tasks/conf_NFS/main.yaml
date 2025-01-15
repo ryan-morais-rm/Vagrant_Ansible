@@ -50,7 +50,7 @@
 - name: Configurar export em /etc/exports
   ansible.builtin.lineinfile:
     path: /etc/exports
-    line: "/dados/nfs 192.168.57.0/24(rw,sync,no_subtree_check,all_squash,anonuid=1001,anongid=1001)"
+    line: "/dados/nfs 192.168.57.0/24(rw,sync,no_subtree_check,all_squash,anonuid=1003,anongid=1005)"
     state: present
 
 ### Ativar e iniciar o serviço NFS ###

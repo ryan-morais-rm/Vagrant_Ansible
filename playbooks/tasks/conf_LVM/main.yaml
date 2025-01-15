@@ -1,80 +1,67 @@
 #### LVM - Configuration ###
+#---------------------------------------#
 ---
-# INSTALANDO AS DEPENDÊNCIAS DO LVM
+### INSTALANDO AS DEPENDÊNCIAS DO LVM ###
 - name: Instalando a dependência lvm2
   package:
     name: lvm2
     state: present
-#-----------------------------------------------------------------------------
 
-# CRIANDO O VOLUME GROUP COM OS VOLUMES FÍSICOS
+### CRIANDO O VOLUME GROUP COM OS VOLUMES FÍSICOS ###
 - name: Criando o Volume Group
   lvg:
     vg: dados
     pvs: /dev/sdb,/dev/sdc,/dev/sdd
     state: present
-#-----------------------------------------------------------------------------
 
-# CRIANDO O VOLUME LÓGICO COM 15GB DE TAMANHO
+### CRIANDO O VOLUME LÓGICO COM 15GB DE TAMANHO ###
 - name: Criação do LVM com 15GB de tamanho
   lvol:
     vg: dados
     lv: sistema
     size: 15G
     state: present
-#-----------------------------------------------------------------------------
 
-
-# CRIANDO O DIRETÓRIO /DADOS
+### CRIANDO O DIRETÓRIO /DADOS ###
 - name: Apontando para o diretório em /dados/
   ansible.builtin.file:
     path: /dados/
     state: directory
     mode: '0755'
-#-----------------------------------------------------------------------------
 
-
-# FORMATANDO O VOLUME COM O SISTEMA DE ARQUIVOS EXT4
+### FORMATANDO O VOLUME COM O SISTEMA DE ARQUIVOS EXT4 ###
 - name: Formatando o volume com o ext4
   filesystem:
     fstype: ext4
     dev: /dev/dados/sistema
-#-----------------------------------------------------------------------------
 
-
-# MONTANDO O VOLUME LÓGICO NO /DADOS/
+### MONTANDO O VOLUME LÓGICO NO /DADOS/ ###
 - name: Montando o LVM em /dados
   mount:
     path: /dados/
     src: /dev/dados/sistema
     fstype: ext4
     state: mounted
-#-----------------------------------------------------------------------------
 
-
-# ADICIONANDO A CONFIGURAÇÃO PERSISTENTE
+### ADICIONANDO A CONFIGURAÇÃO PERSISTENTE ###
 - name: Adicionando a configuração do LVM ao /etc/fstab
   lineinfile:
     path: /etc/fstab
     line: "/dev/dados/sistema /dados ext4 defaults 0 0"
     state: present
-#-----------------------------------------------------------------------------
 
-
-# VERIFICANDO SE A CONFIGURAÇÃO ESTÁ FUNCIONANDO
+### VERIFICANDO SE A CONFIGURAÇÃO ESTÁ FUNCIONANDO ###
 - name: Testando a montagem com /etc/fstab
   shell: mount -a
   register: mount_test
   failed_when: "'error' in mount_test.stderr.lower()"
 #-----------------------------------------------------------------------------
 
-
 # EXIBINDO MENSAGEM DE SUCESSO
 - name: Exibir confirmação que existe persistência
   debug:
     msg: "Configuração do LVM adicionada ao /etc/fstab e testada com sucesso"
 #-----------------------------------------------------------------------------
-
 
 # MOSTRANDO AS INFORMAÇÕES DE MONTAGEM
 - name: Veja as informações de PV, VG e LV no /tmp/arquivo_part.txt
