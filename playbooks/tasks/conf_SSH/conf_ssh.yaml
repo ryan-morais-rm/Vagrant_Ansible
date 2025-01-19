@@ -32,14 +32,14 @@
 # CONFIGURAÇÃO DE ACESSO, POR MEIO DE CHAVES
 - name: Configuração de auth, por meio de chave pública do usuário ryan
   ansible.builtin.copy:
-    src: ~/Vagrant_Ansible/chaves/ryan/ryan_id_rsa.pub
+    src: ~/Vagrant_Ansible/playbooks/tasks/conf_SSH/chaves/ryan/ryan_id_rsa.pub
     dest: /home/ryan/.ssh/authorized_keys
     owner: "ryan"
     group: "acesso_ssh"
     mode: '0600'
 - name: Configuração de auth, por meio de chave pública do usuário julio
   ansible.builtin.copy:
-    src: ~/Vagrant_Ansible/chaves/julio/julio_id_rsa.pub
+    src: ~/Vagrant_Ansible/playbooks/tasks/conf_SSH/chaves/julio/julio_id_rsa.pub
     dest: /home/julio/.ssh/authorized_keys
     owner: "julio"
     group: "acesso_ssh"

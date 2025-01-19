@@ -11,7 +11,7 @@
 # CONFIGURAÇÃO DO ARQUIVO DE MONITORAMENTO
 - name: Transmitindo o arquivo de monitoramento
   copy: 
-    src: ~/Vagrant_Ansible/monitoramento.sh
+    src: ~/Vagrant_Ansible/playbooks/tasks/conf_NFS/monitoramento.sh
     dest: /usr/local/bin/monitoramento.sh
     owner: root
     group: root

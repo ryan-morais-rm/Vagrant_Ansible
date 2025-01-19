@@ -25,7 +25,7 @@ Vagrant.configure("2") do |config|
     aluno.vm.network "public_network", bridge: "enp2s0"
 
     aluno.vm.provision "ansible" do |ansible|
-      ansible.playbook = "playbooks/playbook_principal.yaml"
+      ansible.playbook = "playbooks/main.yaml"
       ansible.inventory_path = "playbooks/inventory.ini"
     end 
     
