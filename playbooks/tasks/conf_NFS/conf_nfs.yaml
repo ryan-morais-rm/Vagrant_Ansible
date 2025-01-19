@@ -1,25 +1,99 @@
-# Toda a configuração desse arquivo corresponde ao NFS
-# Além do arquivo de monitoramento
-
----
-# CONFIGURAÇÃO DO NFS
+### NFS-SERVER - Configuration ###
+#====================================#
 
 
-
-
-
-# CONFIGURAÇÃO DO ARQUIVO DE MONITORAMENTO
-- name: Transmitindo o arquivo de monitoramento
-  copy: 
-    src: ~/Vagrant_Ansible/playbooks/tasks/conf_NFS/monitoramento.sh
-    dest: /usr/local/bin/monitoramento.sh
-    owner: root
-    group: root
-    mode: '0755'
-
-- name: Garantindo que o arquivo sempre será ativado para todos os usuários
-  lineinfile:
-    path: /etc/profile
-    line: "usr/local/bin/monitoramento.sh"
-    create: yes
+# INSTALANDO AS DEPENDÊNCIAS DO LVM
+- name: Instalando a dependência nfs-kernel-server
+  package:
+    name: nfs-kernel-server
     state: present
+#------------------------------------------------------------------------------------------------------------------
+
+
+### Criar o usuário nfs-ifpb ###
+- name: Criar o usuário nfs-ifpb (caso não exista)
+  user:
+    name: nfs-ifpb
+    state: present
+    shell: /bin/false 
+#------------------------------------------------------------------------------------------------------------------
+
+## Adicionando o script de monitoramento de acessos ao servidor ##
+- name: Copiar script de monitoramento para o ambiente
+  ansible.builtin.copy:
+    src: "./monit.sh"
+    dest: "/usr/local/bin/monit.sh"
+    owner: "root"
+    group: "root"
+    mode: '0755'
+#------------------------------------------------------------------------------------------------------------------     
+
+
+### Adicionar execução do script de monitoramento ao /etc/profile ###
+- name: Adicionar execução do script de monitoramento no /etc/profile
+  ansible.builtin.lineinfile:
+    path: /etc/profile
+    line: "/usr/local/bin/monit.sh"
+    state: present
+#------------------------------------------------------------------------------------------------------------------
+
+
+### Criar diretório /dados/nfs e configurar permissões ###
+- name: Criar o diretório /dados/nfs
+  ansible.builtin.file:
+    path: /dados/nfs
+    state: directory
+    owner: nfs-ifpb
+    group: nfs-ifpb
+    mode: '0755'
+#------------------------------------------------------------------------------------------------------------------
+
+
+# GARANTINDO A EXISTÊNCIA DO /etc/exports
+- name: Garantir que o arquivo /etc/exports exista
+  ansible.builtin.file:
+    path: /etc/exports
+    state: touch
+    mode: '0644'
+#------------------------------------------------------------------------------------------------------------------
+
+
+### Configurar o arquivo /etc/exports para exportar o diretório ###
+- name: Configurar export em /etc/exports
+  ansible.builtin.lineinfile:
+    path: /etc/exports
+    line: "/dados/nfs 192.168.57.0/24(rw,sync,no_subtree_check,all_squash,anonuid=1003,anongid=1005)"
+    state: present
+#------------------------------------------------------------------------------------------------------------------
+
+
+### Ativar e iniciar o serviço NFS ###
+- name: Ativar e iniciar o serviço NFS
+  ansible.builtin.service:
+    name: nfs-kernel-server
+    state: started
+    enabled: yes
+#------------------------------------------------------------------------------------------------------------------
+
+
+### Reexportar as configurações ###
+- name: Aplicar as configurações do NFS
+  ansible.builtin.command:
+    cmd: exportfs -arv
+#------------------------------------------------------------------------------------------------------------------
+
+
+### Verificar se o serviço iniciou corretamente ###
+- name: Verificar se o serviço NFS iniciou corretamente
+  ansible.builtin.service:
+    name: nfs-kernel-server
+    state: started
+#------------------------------------------------------------------------------------------------------------------
+
+
+### Remover o shell do usuário nfs-ifpb para aumentar a segurança ###
+- name: Remover o shell do usuário nfs-ifpb para aumentar a segurança
+  user:
+    name: nfs-ifpb
+    shell: /bin/false
+#------------------------------------------------------------------------------------------------------------------

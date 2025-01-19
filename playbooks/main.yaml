@@ -16,7 +16,7 @@
     - name: Inclusão do Playbook de conf do SSH
       include_tasks: ~/Vagrant_Ansible/playbooks/tasks/conf_SSH/conf_ssh.yaml
 
-    - name: Inclusão do Playbook de conf do volumes
+    - name: Inclusão do Playbook de conf do LVM
       include_tasks: ~/Vagrant_Ansible/playbooks/tasks/conf_LVM/conf_lvm.yaml
 
     - name: Inclusão do Playbook de conf do NFS

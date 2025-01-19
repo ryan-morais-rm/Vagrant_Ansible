@@ -3,10 +3,7 @@
 ---
 - name: Atualizando os pacotes apt
   apt: update_cache=yes force_apt_get=yes
-    
-#- name: Melhorando os pacotes
-#  apt: upgrade=dist force_apt_get=yes
-
+  
 - name: Configurando o hostname para padrão correto
   ansible.builtin.hostname:
     name: p01-Julio-Ryan
