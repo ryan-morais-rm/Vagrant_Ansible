@@ -74,7 +74,9 @@ Execução das Tasks:
 
 Todas as chaves SSH possuem passphrases
     * A passphrase do user "julio" é "julio"
+    * Acessar user "julio", ssh 192.168.57.10 -l julio -i ~/Vagrant_Ansible/playbooks/tasks/conf_SSH/chaves/julio/julio_id_rsa 
     * A passphrase do user "ryan" é "ryan"
+    * Acessar user "ryan", ssh 192.168.57.10 -l ryan -i ~/Vagrant_Ansible/playbooks/tasks/conf_SSH/chaves/ryan/ryan_id_rsa
     * Os usuários possuem senhas nativas, se for necessário é só utilizar o arquivo "Passwords.txt"
 
 ## 🌐 Collaborators:
