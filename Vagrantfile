@@ -30,7 +30,7 @@ Vagrant.configure("2") do |config|
     end 
     
     aluno.vm.provider "virtualbox" do |vb|
-      vb.name = "p01-Julio01-Ryan-02"
+      vb.name = "p01-Julio01-Ryan02"
     end
     
     # Configuração de discos da VM

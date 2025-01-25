@@ -85,3 +85,12 @@
     line: 'AllowGroups acesso_ssh'
     state: present
 #---------------------------------------------------------------------------------------
+
+
+# REINICIANDO O SSH PARA ESTABELECER A NOVA CONFIGURAÇÃO
+- name: Reiniciando o SSH
+  ansible.builtin.service:
+    name: ssh
+    state: restarted
+#---------------------------------------------------------------------------------------
+

@@ -1,4 +1,4 @@
-# Toda a configuração desse playbook está de acordo aos usuários
+## Toda a configuração desse playbook está de acordo aos usuários
 # Aqui possui a configuração criação de usuários, grupos, e SUDO 
 
 ---
@@ -15,12 +15,12 @@
     name: ryan
     password: "$6$Y2HS5gc5WvcLkccS$EXOUqZ6qF9/743QqXRVnzytX9nYXHn.3NsnGM/9fqIr1Wnf5M8bNcNoIyJ13PNho/CLvUXc/.NacncLUqgEjc1"
     shell: /bin/bash
-    home: /home/ryan
+    home: /home/ryan 
+#------------------------------------------------------------------------------------------------------------------------------------    
 
-#---------------------------------------------------------------------------------------------------      
 
 # CRIAÇÃO DO GRUPO IFPB
-- name: Criando o grupo ifpb e aplicando o SUDO
+- name: Criando o grupo ifpb
   ansible.builtin.group:
     name: ifpb
     state: present
@@ -30,6 +30,8 @@
   ansible.builtin.group:
     name: acesso_ssh
     state: present
+#------------------------------------------------------------------------------------------------------------------------------------
+
 
 # ADICIONANDO OS USUÁRIOS AO GRUPO ACESSO_SSH
 - name: Adição dos usuário ryan ao grupo acesso_ssh
@@ -42,9 +44,25 @@
     name: julio
     groups: acesso_ssh
     append: yes
+#------------------------------------------------------------------------------------------------------------------------------------
 
-# APLICANDO O SUDO NO GRUPO IFPB
-- name: Colocando SUDO no grupo IFPB      
+
+# ADICIONANDO OS USUÁRIOS AO GRUPO IFPB
+- name: Adição do usuário ryan ao grupo ifpb
+  ansible.builtin.user:
+    name: ryan
+    groups: ifpb
+    append: yes
+- name: Adição do usuário julio ao grupo ifpb
+  ansible.builtin.user:
+    name: julio
+    groups: ifpb
+    append: yes
+#------------------------------------------------------------------------------------------------------------------------------------
+
+
+# APLICANDO O SUDOERS.D NO GRUPO IFPB
+- name: Adicionando o grupo ifpb ao sudoers.d      
   copy:
     dest: /etc/sudoers.d/{{ sudo_group }}
     content: "{{ sudo_group }} ALL=(ALL) NOPASSWD:ALL"
@@ -53,5 +71,15 @@
     mode: '0440'
   vars:
     sudo_group: ifpb
+#------------------------------------------------------------------------------------------------------------------------------------
 
-#---------------------------------------------------------------------------------------------------
+
+# APLICANDO SUDOERS NO GRUPO IFPB
+- name: Adicionando o grupo ifpb ao sudoers
+  lineinfile:
+    path: /etc/sudoers
+    regexp: '^%sudoers'
+    line: '%ifpb ALL=(ALL) NOPASSWD: ALL'
+    state: present
+    validate: '/usr/sbin/visudo -cf %s'
+#------------------------------------------------------------------------------------------------------------------------------------

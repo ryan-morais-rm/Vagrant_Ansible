@@ -5,5 +5,19 @@
   apt: update_cache=yes force_apt_get=yes
   
 - name: Configurando o hostname para padrão correto
-  ansible.builtin.hostname:
-    name: p01-Julio-Ryan
+  hostname:
+    name: p01-Julio01-Ryan02
+
+- name: Atualizando /etc/hosts para o hostname correto
+  lineinfile:
+    path: /etc/hosts
+    regexp: '^127\.0\.1\.1'
+    line: '127.0.1.1   p01-Julio01-Ryan02'
+    state: present
+
+- name: Garantindo que o localhost está presente
+  lineinfile:
+    path: /etc/hosts
+    regexp: '^127\.0\.0\.1'
+    line: '127.0.0.1   localhost'
+    state: present
