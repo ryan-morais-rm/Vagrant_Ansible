@@ -66,7 +66,7 @@ Execução das Tasks:
 2. **Instale a box "generic/debian12"**  
    Comandos:  
    ```bash
-   vagrant box add generic/debian12 --provider virtualbox
+   vagrant box add debian/bookworm64 --provider virtualbox
    vagrant up
 
 ---
