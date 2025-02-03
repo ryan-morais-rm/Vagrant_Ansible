@@ -8,16 +8,16 @@
   become_user: root
   tasks:
     - name: Inclusão do Playbook de conf do sistema
-      include_tasks: ~/Vagrant_Ansible/playbooks/tasks/conf_Sys/conf_sistema.yaml
+      include_tasks: ./tasks/conf_Sys/conf_sistema.yaml
 
     - name: Inclusão do Playbook de conf dos usuários
-      include_tasks: ~/Vagrant_Ansible/playbooks/tasks/conf_users/conf_usuarios.yaml
+      include_tasks: ./tasks/conf_users/conf_usuarios.yaml
 
     - name: Inclusão do Playbook de conf do SSH
-      include_tasks: ~/Vagrant_Ansible/playbooks/tasks/conf_SSH/conf_ssh.yaml
+      include_tasks: ./tasks/conf_SSH/conf_ssh.yaml
 
     - name: Inclusão do Playbook de conf do LVM
-      include_tasks: ~/Vagrant_Ansible/playbooks/tasks/conf_LVM/conf_lvm.yaml
+      include_tasks: ./tasks/conf_LVM/conf_lvm.yaml
 
     - name: Inclusão do Playbook de conf do NFS
-      include_tasks: ~/Vagrant_Ansible/playbooks/tasks/conf_NFS/conf_nfs.yaml
+      include_tasks: ./tasks/conf_NFS/conf_nfs.yaml
